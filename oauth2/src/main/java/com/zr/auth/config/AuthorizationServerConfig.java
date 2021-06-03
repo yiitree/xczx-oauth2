@@ -69,6 +69,7 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.jdbc(this.dataSource).clients(this.clientDetails());
+        // 把auth写在内存中
        /* clients.inMemory()
                 .withClient("XcWebApp")//客户端id
                 .secret("XcWebApp")//密码，要保密

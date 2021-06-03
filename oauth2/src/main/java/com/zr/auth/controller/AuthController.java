@@ -10,6 +10,8 @@ import com.zr.exception.ExceptionCast;
 import com.zr.model.response.CommonCode;
 import com.zr.model.response.ResponseResult;
 import com.zr.util.CookieUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,9 +26,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
+@Api(value = "用户认证",description = "用户认证接口")
 @RestController
 @RequestMapping("/")
-public class AuthController implements AuthControllerApi {
+public class AuthController {
 
     @Value("${auth.clientId}")
     String clientId;
@@ -46,7 +49,7 @@ public class AuthController implements AuthControllerApi {
      * @param loginRequest
      * @return
      */
-    @Override
+    @ApiOperation("登录")
     @PostMapping("/userlogin")
     public LoginResult login(LoginRequest loginRequest) {
         if(loginRequest == null || StringUtils.isEmpty(loginRequest.getUsername())){
@@ -81,7 +84,7 @@ public class AuthController implements AuthControllerApi {
      * 退出
      * @return
      */
-    @Override
+    @ApiOperation("退出")
     @PostMapping("/userlogout")
     public ResponseResult logout() {
         //取出cookie中的用户身份令牌
@@ -108,7 +111,7 @@ public class AuthController implements AuthControllerApi {
      * 申请令牌
      * @return
      */
-    @Override
+    @ApiOperation("查询用户jwt令牌")
     @GetMapping("/userjwt")
     public JwtResult userjwt() {
         //取出cookie中的用户身份令牌

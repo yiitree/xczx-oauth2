@@ -14,26 +14,24 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** 身份校验过虑器
- * @author Administrator
- * @version 1.0
+/**
+ * 身份校验过虑器
  **/
-
 @Component
 public class LoginFilter extends ZuulFilter {
 
     @Autowired
     AuthService authService;
 
-    //过虑器的类型
+    /**
+     * 过虑器的类型
+     pre：请求在被路由之前执行
+     routing：在路由请求时调用
+     post：在routing和errror过滤器之后调用
+     error：处理请求时发生错误调用
+     */
     @Override
     public String filterType() {
-        /**
-         pre：请求在被路由之前执行
-         routing：在路由请求时调用
-         post：在routing和errror过滤器之后调用
-         error：处理请求时发生错误调用
-         */
         return "pre";
     }
 

@@ -23,7 +23,11 @@ public class AuthService {
     @Autowired
     StringRedisTemplate stringRedisTemplate;
 
-    //从头取出jwt令牌
+    /**
+     * 相当于一个工具类，从request头信息中获取jwt
+     * @param request
+     * @return
+     */
     public String getJwtFromHeader(HttpServletRequest request){
         //取出头信息
         String authorization = request.getHeader("Authorization");
