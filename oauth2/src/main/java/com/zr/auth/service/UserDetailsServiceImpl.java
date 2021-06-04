@@ -1,6 +1,6 @@
 package com.zr.auth.service;
 
-import com.zr.auth.client.UserClient;
+import com.zr.auth.domain.UserJwt;
 import com.zr.domain.XcMenu;
 import com.zr.domain.ext.XcUserExt;
 import org.apache.commons.lang3.StringUtils;
@@ -23,16 +23,13 @@ import java.util.List;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    UserClient userClient;
+    private UserService userService;
 
     @Autowired
     ClientDetailsService clientDetailsService;
 
     /**
      * springsecurity自动调用的密码模式的方法
-     * @param username
-     * @return
-     * @throws UsernameNotFoundException
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -51,20 +48,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return null;
         }
         //远程调用用户中心根据账号查询用户信息
-        XcUserExt userext = userClient.getUserext(username);
+        XcUserExt userext = userService.getUserExt(username);
         if(userext == null){
             //返回空给spring security表示用户不存在
             return null;
         }
-//        XcUserExt userext = new XcUserExt();
-//        userext.setUsername("itcast");
-//        userext.setPassword(new BCryptPasswordEncoder().encode("123"));
-        //userext.setPermissions(new ArrayList<XcMenu>());//权限暂时用静态的
-
         //取出正确密码（hash值）
         String password = userext.getPassword();
-        //这里暂时使用静态密码
-//       String password ="123";
         //用户权限，这里暂时使用静态数据，最终会从数据库读取
         //从数据库获取权限
         List<XcMenu> permissions = userext.getPermissions();
@@ -73,22 +63,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         List<String> user_permission = new ArrayList<>();
         permissions.forEach(item-> user_permission.add(item.getCode()));
-        //使用静态的权限表示用户所拥有的权限
-//        user_permission.add("course_get_baseinfo");//查询课程信息
-//        user_permission.add("course_pic_list");//图片查询
         String user_permission_string  = StringUtils.join(user_permission.toArray(), ",");
         UserJwt userDetails = new UserJwt(username,
                 password,
                 AuthorityUtils.commaSeparatedStringToAuthorityList(user_permission_string));
         userDetails.setId(userext.getId());
-        userDetails.setUtype(userext.getUtype());//用户类型
-        userDetails.setCompanyId(userext.getCompanyId());//所属企业
-        userDetails.setName(userext.getName());//用户名称
-        userDetails.setUserpic(userext.getUserpic());//用户头像
-       /* UserDetails userDetails = new org.springframework.security.core.userdetails.User(username,
-                password,
-                AuthorityUtils.commaSeparatedStringToAuthorityList(""));*/
-//                AuthorityUtils.createAuthorityList("course_get_baseinfo","course_get_list"));
+        //用户类型
+        userDetails.setUtype(userext.getUtype());
+        //用户名称
+        userDetails.setName(userext.getName());
+        //用户头像
+        userDetails.setUserpic(userext.getUserpic());
         return userDetails;
     }
 }

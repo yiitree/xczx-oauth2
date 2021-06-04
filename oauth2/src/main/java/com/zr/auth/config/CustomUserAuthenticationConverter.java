@@ -1,6 +1,6 @@
 package com.zr.auth.config;
 
-import com.zr.auth.service.UserJwt;
+import com.zr.auth.domain.UserJwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -33,7 +33,7 @@ public class CustomUserAuthenticationConverter extends DefaultUserAuthentication
         if(principal instanceof  UserJwt){
             userJwt = (UserJwt) principal;
         }else{
-            //refresh_token默认不去调用userdetailService获取用户信息，这里我们手动去调用，得到 UserJwt
+            // refresh_token默认不去调用userdetailService获取用户信息，这里我们手动去调用，得到 UserJwt
             UserDetails userDetails = userDetailsService.loadUserByUsername(name);
             userJwt = (UserJwt) userDetails;
         }
@@ -41,7 +41,6 @@ public class CustomUserAuthenticationConverter extends DefaultUserAuthentication
         response.put("id", userJwt.getId());
         response.put("utype",userJwt.getUtype());
         response.put("userpic",userJwt.getUserpic());
-        response.put("companyId",userJwt.getCompanyId());
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
             response.put("authorities", AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
         }

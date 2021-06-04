@@ -31,3 +31,4 @@ public class XcUserRole {
     private Date createTime;
 
 }
+

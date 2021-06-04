@@ -17,7 +17,4 @@ public class XcUserExt extends XcUser {
     //权限信息
     private List<XcMenu> permissions;
 
-    //企业信息
-    private String companyId;
-
 }

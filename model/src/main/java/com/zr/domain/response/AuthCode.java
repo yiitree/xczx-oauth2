@@ -5,10 +5,6 @@ import com.zr.model.response.ResultCode;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.ToString;
 
-
-/**
- * Created by admin on 2018/3/5.
- */
 @ToString
 public enum AuthCode implements ResultCode {
     AUTH_USERNAME_NONE(false,23001,"请输入账号！"),
@@ -21,21 +17,30 @@ public enum AuthCode implements ResultCode {
     AUTH_LOGIN_TOKEN_SAVEFAIL(false,23008,"存储令牌失败！"),
     AUTH_LOGOUT_FAIL(false,23009,"退出失败！");
 
-    //操作代码
+    /**
+     * 操作是否成功
+     */
     @ApiModelProperty(value = "操作是否成功", example = "true", required = true)
     boolean success;
 
-    //操作代码
+    /**
+     * 操作代码
+     */
     @ApiModelProperty(value = "操作代码", example = "22001", required = true)
     int code;
-    //提示信息
+
+    /**
+     * 提示信息
+     */
     @ApiModelProperty(value = "操作提示", example = "操作过于频繁！", required = true)
     String message;
+
     AuthCode(boolean success, int code, String message){
         this.success = success;
         this.code = code;
         this.message = message;
     }
+
     private static final ImmutableMap<Integer, AuthCode> CACHE;
 
     static {

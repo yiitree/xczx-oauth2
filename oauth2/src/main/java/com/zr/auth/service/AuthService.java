@@ -53,12 +53,10 @@ public class AuthService {
         if(authToken == null){
             ExceptionCast.cast(AuthCode.AUTH_LOGIN_APPLYTOKEN_FAIL);
         }
-        //用户身份令牌
-        String access_token = authToken.getAccess_token();
         //存储到redis中的内容 --- jwt令牌保存到redis，jti返回前端
-        String jsonString = JSON.toJSONString(authToken);
+        String jwt = JSON.toJSONString(authToken);
         //将令牌存储到redis
-        boolean result = this.saveToken(access_token, jsonString, tokenValiditySeconds);
+        boolean result = this.saveToken(authToken.getJtl(), jwt, tokenValiditySeconds);
         if (!result) {
             ExceptionCast.cast(AuthCode.AUTH_LOGIN_TOKEN_SAVEFAIL);
         }
@@ -126,11 +124,11 @@ public class AuthService {
         }
         AuthToken authToken = new AuthToken();
         //用户身份令牌 --- 小令牌，用于返回前端
-        authToken.setAccess_token((String) bodyMap.get("jti"));
+        authToken.setJtl((String) bodyMap.get("jti"));
         //jwt令牌 --- 用于保存到服务器
-        authToken.setJwt_token((String) bodyMap.get("access_token"));
+        authToken.setJwt((String) bodyMap.get("access_token"));
         //刷新令牌
-        authToken.setRefresh_token((String) bodyMap.get("refresh_token"));
+        authToken.setRefreshToken((String) bodyMap.get("refresh_token"));
         return authToken;
     }
 
@@ -176,7 +174,6 @@ public class AuthService {
             e.printStackTrace();
             return null;
         }
-
     }
 
     /**

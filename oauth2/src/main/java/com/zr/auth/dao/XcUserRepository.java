@@ -1,6 +1,7 @@
-package com.zr.usercenter.dao;
+package com.zr.auth.dao;
 
-import com.zr.usercenter.domain.XcUser;
+
+import com.zr.domain.XcUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
